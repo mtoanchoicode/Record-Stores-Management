@@ -1,0 +1,26 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Static files (if generated during runtime)
+public/uploads/
+
+# IDE-specific files
+.vscode/
+.idea/
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+*.tmp

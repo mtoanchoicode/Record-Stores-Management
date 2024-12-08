@@ -1,0 +1,113 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+
+block main
+    +alert-success(5000)
+    +alert-error(5000)
+
+    h1(class="mb-4") Edit product 
+
+    form(
+        action=`${prefixAdmin}/products/edit/${product.id}?_method=PATCH`
+        id="form-edit-product"
+        method="POST"
+        enctype = "multipart/form-data"
+    )
+        div(class="form-group")
+            label(for="title") Product Name 
+            input(
+                type = "text"
+                class = "form-control"
+                id = "title"
+                name="title"
+                required
+                value=product.title
+            )
+        div(class="form-group")
+            label(for="desc") Description
+            textarea(
+                class = "form-control"
+                id = "desc"
+                name="description"
+                rows="5"
+            ) #{product.description}
+        div(class="form-group")
+            label(for="price") Price
+            input(
+                type = "number"
+                class = "form-control"
+                id = "price"
+                name="price"
+                value=product.price
+                min="0"
+            )
+        div(class="form-group")
+            label(for="disscount") Disscount (%)
+            input(
+                type = "number"
+                class = "form-control"
+                id = "disscount"
+                name="discountPercentage"
+                value=product.discountPercentage
+                min="0"
+            )
+        div(class="form-group")
+            label(for="stock") Stock
+            input(
+                type = "number"
+                class = "form-control"
+                id = "stock"
+                name="stock"
+                value=product.stock
+                min="0"
+            )
+        div(class="form-group" upload-image)
+            label(for="thumbnail") Thumbnail (url)
+            input(
+                type = "file"
+                class = "form-control"
+                id = "thumbnail"
+                name="thumbnail"
+                accept="image/"
+                upload-image-input
+            )
+            img(src=product.thumbnail upload-image-preview class="img-preview")
+        div(class="form-group")
+            label(for="position") Position
+            input(
+                type = "number"
+                class = "form-control"
+                id = "position"
+                name="position"
+                placeholder = "Auto Increment"
+                min="1"
+                value=product.position
+            )
+        div(class="form-group form-check form-check-inline")
+            input(
+                type = "radio"
+                class = "form-check-input"
+                id = "statusAvailable"
+                name="status"
+                value="available"
+                checked=(product.status == "available" ? true:false)
+            )
+            label(for="statusAvailable" class="form-check-label") Available
+        div(class="form-group form-check form-check-inline")
+            input(
+                type = "radio"
+                class = "form-check-input"
+                id = "statusUnavailable"
+                name="status"
+                value="unavailable"
+                checked=(product.status == "unavailable" ? true:false)
+            )
+            label(for="statusAvailable" class="form-check-label") Unavailable
+        div(class="form-group")
+            button(
+                type="submit"
+                class="btn btn-primary"
+            ) Update
+
+
+    script(src="/admin/js/product.js")
