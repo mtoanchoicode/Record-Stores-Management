@@ -28,7 +28,7 @@ const routeAdmin = require("./Routers/admin/index.route")
 const route = require("./Routers/client/index.route")
 
 // Configure PUG
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
 // Initialize Flash
@@ -39,8 +39,9 @@ app.use(flash())
 // App locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 
+
 // Configure static file
-app.use(express.static("public"));
+app.use(express.static(`${__dirname}/public`));
 
 // Routes
 route(app);
