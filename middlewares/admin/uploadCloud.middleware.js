@@ -3,7 +3,7 @@ const streamifier = require('streamifier')
 
 // Configuration Cloudinary
 cloudinary.config({ 
-    cloud_name: process.env.CLOUD_NAME, 
+    cloud_name: process.env.CLOUD_NAME,
     api_key: process.env.CLOUD_KEY, 
     api_secret: process.env.CLOUD_API // Click 'View API Keys' above to copy your API secret
 });
