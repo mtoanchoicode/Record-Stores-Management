@@ -79,9 +79,10 @@ block main
                                 else
                                     a(href="javascript:;" class ="badge bg-danger" data-status=item.status data-id = item.id button-change-status) Unavailable
                             td 
-                                a(href=`${prefixAdmin}/products/edit/${item.id}` class="btn btn-warning btn-sm") Edit 
+                                a(href=`${prefixAdmin}/products/detail/${item.id}` class="btn btn-secondary btn-sm mx-1") Detail 
+                                a(href=`${prefixAdmin}/products/edit/${item.id}` class="btn btn-warning btn-sm mx-1") Edit 
                                 button(
-                                    class="btn btn-danger btn-sm ms-1"
+                                    class="btn btn-danger btn-sm mx-1"
                                     button-delete
                                     data-id = item.id
                                     ) Delete 
