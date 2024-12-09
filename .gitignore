@@ -10,7 +10,7 @@ node_modules/
 .env
 
 # Static files (if generated during runtime)
-public/uploads/
+#public/uploads/
 
 # IDE-specific files
 .vscode/
