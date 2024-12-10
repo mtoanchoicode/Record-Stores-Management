@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main 
     h1(class = "mb-4") Create new Category 
@@ -19,14 +20,18 @@ block main
                 name="title"
                 required
             )
+            
         div(class="form-group")
             label(for="parent_id") Parent Category 
-            input(
-                type = "text"
-                class = "form-control"
+            select(
+                name = "parent_id"
                 id = "parent_id"
-                name="parent_id"
+                class= "form-select"
             )
+                option(value="") --Choose Parent Category--
+                if (records)
+                    +select-tree(records)
+
         div(class="form-group")
             label(for="desc") Description
             textarea(
