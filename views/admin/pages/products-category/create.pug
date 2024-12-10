@@ -1,20 +1,17 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
-block main
-
+block main 
+    h1(class = "mb-4") Create new Category 
     +alert-error(5000)
 
-    h1(class="mb-4") Add new product 
-
     form(
-        action=`${prefixAdmin}/products/create`
-        id="form-create-product"
+        action=`${prefixAdmin}/products-category/create`
         method="POST"
         enctype = "multipart/form-data"
     )
         div(class="form-group")
-            label(for="title") Product Name 
+            label(for="title") Title 
             input(
                 type = "text"
                 class = "form-control"
@@ -23,42 +20,20 @@ block main
                 required
             )
         div(class="form-group")
+            label(for="parent_id") Parent Category 
+            input(
+                type = "text"
+                class = "form-control"
+                id = "parent_id"
+                name="parent_id"
+            )
+        div(class="form-group")
             label(for="desc") Description
             textarea(
                 class = "form-control tiny-mce"
                 id = "desc"
                 name="description"
                 rows="5"
-            )
-        div(class="form-group")
-            label(for="price") Price
-            input(
-                type = "number"
-                class = "form-control"
-                id = "price"
-                name="price"
-                value="0"
-                min="0"
-            )
-        div(class="form-group")
-            label(for="disscount") Disscount (%)
-            input(
-                type = "number"
-                class = "form-control"
-                id = "disscount"
-                name="discountPercentage"
-                value="0"
-                min="0"
-            )
-        div(class="form-group")
-            label(for="stock") Stock
-            input(
-                type = "number"
-                class = "form-control"
-                id = "stock"
-                name="stock"
-                value="0"
-                min="0"
             )
         div(class="form-group" upload-image)
             label(for="thumbnail") Thumbnail (url)
@@ -105,6 +80,3 @@ block main
                 type="submit"
                 class="btn btn-primary"
             ) Create New
-
-
-    script(src="/admin/js/product.js")

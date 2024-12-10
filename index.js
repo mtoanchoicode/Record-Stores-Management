@@ -1,10 +1,10 @@
 const express = require("express");
+var path = require('path');
 const methodOverride = require("method-override")
 const bodyParser = require('body-parser')
 const flash = require("express-flash")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
-const multer = require("multer")
 
 require('dotenv').config();
 
@@ -35,6 +35,9 @@ app.set('view engine', 'pug');
 app.use(cookieParser("10042005"))
 app.use(session({cookie:{maxage:60000}}))
 app.use(flash())
+
+// TinyMCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
 
 // App locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
