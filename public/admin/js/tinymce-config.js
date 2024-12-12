@@ -1,4 +1,3 @@
 tinymce.init({
-    selector: 'textarea.tiny-mce',
-    plugins: "image"
+    selector: 'textarea.tiny-mce'
   });

@@ -1,10 +1,12 @@
 const Product = require("../../models/product.models")
+const ProductCategory = require("../../models/product-category.model")
 
 const systemConfig = require("../../config/system")
 
 const filterStatusHelper = require("../../helper/filterStatus");
 const searchHelper = require("../../helper/search");
 const paginationHelper = require("../../helper/pagination");
+const CreateTreeHelper = require("../../helper/CreateTree") 
 
 // [GET] /admin/products
 
@@ -123,9 +125,16 @@ module.exports.deleteItem = async (req, res) => {
 // [GET] /admin/products/create
 
 module.exports.create = async (req, res)=>{
+    let find = {
+        deleted: false
+    }
+
+    const records = await ProductCategory.find(find)
+    const category = CreateTreeHelper.tree(records)
 
     res.render("admin/pages/products/create", {
         pageTitle: "New Product",
+        category: category
     });
 }
 
@@ -158,9 +167,16 @@ module.exports.edit = async (req, res)=>{
         }
         const product = await Product.findOne(find)
     
+        const records = await ProductCategory.find({
+            deleted: false
+        })
+        const category = CreateTreeHelper.tree(records)
+    
+    
         res.render("admin/pages/products/edit", {
             pageTitle: "Edit Product",
-            product: product
+            product: product,
+            category: category
         });
     }
     catch(error){
@@ -176,12 +192,6 @@ module.exports.editPatch = async (req, res)=>{
     req.body.disscountPercentage = parseInt(req.body.disscountPercentage)
     req.body.stock = parseInt(req.body.stock)
     req.body.position = parseInt(req.body.position)
-
-    // if(req.file){
-    //     req.body.thumbnail=`/uploads/${req.file.filename}`
-        
-    // }
-    
 
     try{
         await Product.updateOne({

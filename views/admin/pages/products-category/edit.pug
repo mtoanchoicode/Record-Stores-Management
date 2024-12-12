@@ -2,38 +2,37 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
-block main
-    +alert-success(5000)
+block main 
+    h1(class = "mb-4") Edit Category 
     +alert-error(5000)
 
-    h1(class="mb-4") Edit product 
-
     form(
-        action=`${prefixAdmin}/products/edit/${product.id}?_method=PATCH`
-        id="form-edit-product"
+        action=`${prefixAdmin}/products-category/edit/${data.id}?_method=PATCH`
         method="POST"
         enctype = "multipart/form-data"
     )
         div(class="form-group")
-            label(for="title") Product Name 
+            label(for="title") Title 
             input(
                 type = "text"
                 class = "form-control"
                 id = "title"
                 name="title"
+                value = data.title
                 required
-                value=product.title
             )
+            
         div(class="form-group")
-            label(for="product_category_id") Category 
+            label(for="parent_id") Parent Category 
             select(
-                name = "product_category_id"
-                id = "product_category_id"
+                name = "parent_id"
+                id = "parent_id"
                 class= "form-select"
             )
-                option(value="") --Choose Category--
-                if (category)
-                    +select-tree(category, 1, product.product_category_id)
+                option(value="") --Choose Parent Category--
+                if (records)
+                    +select-tree(records, 1, data.parent_id)
+
         div(class="form-group")
             label(for="desc") Description
             textarea(
@@ -41,37 +40,7 @@ block main
                 id = "desc"
                 name="description"
                 rows="5"
-            ) #{product.description}
-        div(class="form-group")
-            label(for="price") Price
-            input(
-                type = "number"
-                class = "form-control"
-                id = "price"
-                name="price"
-                value=product.price
-                min="0"
-            )
-        div(class="form-group")
-            label(for="disscount") Disscount (%)
-            input(
-                type = "number"
-                class = "form-control"
-                id = "disscount"
-                name="discountPercentage"
-                value=product.discountPercentage
-                min="0"
-            )
-        div(class="form-group")
-            label(for="stock") Stock
-            input(
-                type = "number"
-                class = "form-control"
-                id = "stock"
-                name="stock"
-                value=product.stock
-                min="0"
-            )
+            ) #{data.description}
         div(class="form-group" upload-image)
             label(for="thumbnail") Thumbnail (url)
             input(
@@ -82,7 +51,7 @@ block main
                 accept="image/"
                 upload-image-input
             )
-            img(src=product.thumbnail upload-image-preview class="img-preview")
+            img(src=data.thumbnail upload-image-preview class="img-preview")
         div(class="form-group")
             label(for="position") Position
             input(
@@ -92,7 +61,7 @@ block main
                 name="position"
                 placeholder = "Auto Increment"
                 min="1"
-                value=product.position
+                value = data.position
             )
         div(class="form-group form-check form-check-inline")
             input(
@@ -101,7 +70,7 @@ block main
                 id = "statusAvailable"
                 name="status"
                 value="available"
-                checked=(product.status == "available" ? true:false)
+                checked=(data.status == "available" ? true:false)
             )
             label(for="statusAvailable" class="form-check-label") Available
         div(class="form-group form-check form-check-inline")
@@ -111,7 +80,7 @@ block main
                 id = "statusUnavailable"
                 name="status"
                 value="unavailable"
-                checked=(product.status == "unavailable" ? true:false)
+                checked=(data.status == "unavailable" ? true:false)
             )
             label(for="statusAvailable" class="form-check-label") Unavailable
         div(class="form-group")
@@ -119,6 +88,3 @@ block main
                 type="submit"
                 class="btn btn-primary"
             ) Update
-
-
-    script(src="/admin/js/product.js")
