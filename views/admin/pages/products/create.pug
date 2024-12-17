@@ -31,7 +31,7 @@ block main
                 id = "product_category_id"
                 class= "form-select"
             )
-                option(value="") --Choose Category--
+                option(disabled selected) --Choose Category--
                 if (category)
                     +select-tree(category)
 

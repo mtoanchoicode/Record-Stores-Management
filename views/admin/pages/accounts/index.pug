@@ -1,0 +1,71 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1(class="mb-4") Account List 
+
+    .card.mb-3 
+        .card-header Lists 
+        .card-body 
+            .row 
+                .col-8 
+
+                .col-4.text-end
+                    a(
+                        href=`${prefixAdmin}/accounts/create`
+                        class="btn btn-outline-success"
+                    ) + Add New
+            
+            table(
+                class = "table table-hover table-sm"
+            )
+                thead 
+                    tr 
+                        th STT 
+                        th Avatar 
+                        th Fullname 
+                        th Permissions 
+                        th Email 
+                        th Status 
+                        th Actions
+                tbody 
+                    each item, index in records 
+                        tr 
+                            td  index+1
+                            td 
+                                img(
+                                    src=item.avatar 
+                                    alt=item.fullName 
+                                    width = "100px"
+                                    heigh= auto
+                                )
+                            td #{item.fullName}
+                            td #{item.role.title}
+                            td #{item.email}
+                            td 
+                                if (item.status == "active")
+                                    a(
+                                        href="javascript:;"
+                                        class = "badge bg-success"
+                                        data-status = "active"
+                                    ) Active 
+                                else
+                                    a(
+                                        href="javascript:;"
+                                        class = "badge bg-danger"
+                                        data-status = "inactive"
+                                    ) Inactive 
+                            td 
+                                a(
+                                    class = "btn btn-secondary btn-sm"
+                                    href = `${prefixAdmin}/accounts/detail/${item.id}`
+                                    ) Detail
+                                a(
+                                    class = "btn btn-warning btn-sm ms-1"
+                                    href = `${prefixAdmin}/accounts/edit/${item.id}`
+                                    ) Edit 
+                                a(
+                                    class = "btn btn-danger btn-sm ms-1"
+                                    href = `${prefixAdmin}/accounts/delete/${item.id}`
+                                    ) Delete
+                
+                    
