@@ -1,31 +1,32 @@
 extends ../../layouts/default.pug
 
 block main 
-    h1(class="mb-4") Add new role
+    if(role.permission.includes("roles_create"))
+        h1(class="mb-4") Add new role
 
-    form(
-        action = `${prefixAdmin}/roles/create`
-        method = "POST"
-    )
-        div(class = "mb-3")
-            label(for = "title") Role Name 
-            input(
-                type = "text"
-                class = "form-control"
-                id = "title"
-                name = "title"
-                required
-            )
-        div(class = "mb-3")
-            label(for = "description") Description
-            input(
-                type = "text"
-                class = "form-control"
-                id = "description"
-                name = "description"
-            )
-        div(class = "mb-3")
-            button(
-                type = "submit"
-                class = "btn btn-primary"
-            ) Create New
+        form(
+            action = `${prefixAdmin}/roles/create`
+            method = "POST"
+        )
+            div(class = "mb-3")
+                label(for = "title") Role Name 
+                input(
+                    type = "text"
+                    class = "form-control"
+                    id = "title"
+                    name = "title"
+                    required
+                )
+            div(class = "mb-3")
+                label(for = "description") Description
+                input(
+                    type = "text"
+                    class = "form-control"
+                    id = "description"
+                    name = "description"
+                )
+            div(class = "mb-3")
+                button(
+                    type = "submit"
+                    class = "btn btn-primary"
+                ) Create New

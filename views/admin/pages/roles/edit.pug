@@ -2,36 +2,37 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-    h1(class="mb-4") Edit Role
+    if(role.permission.includes("roles_edit"))
+        h1(class="mb-4") Edit Role
 
-    +alert-success(5000)
-    +alert-error(5000)
+        +alert-success(5000)
+        +alert-error(5000)
 
-    form(
-        action = `${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
-        method = "POST"
-    )
-        div(class = "mb-3")
-            label(for = "title") Role Name 
-            input(
-                type = "text"
-                class = "form-control"
-                id = "title"
-                name = "title"
-                value = data.title
-                required
-            )
-        div(class = "mb-3")
-            label(for = "description") Description
-            input(
-                type = "text"
-                class = "form-control"
-                id = "description"
-                name = "description"
-                value = data.description
-            )
-        div(class = "mb-3")
-            button(
-                type = "submit"
-                class = "btn btn-primary"
-            ) Update
+        form(
+            action = `${prefixAdmin}/roles/edit/${data.id}?_method=PATCH`
+            method = "POST"
+        )
+            div(class = "mb-3")
+                label(for = "title") Role Name 
+                input(
+                    type = "text"
+                    class = "form-control"
+                    id = "title"
+                    name = "title"
+                    value = data.title
+                    required
+                )
+            div(class = "mb-3")
+                label(for = "description") Description
+                input(
+                    type = "text"
+                    class = "form-control"
+                    id = "description"
+                    name = "description"
+                    value = data.description
+                )
+            div(class = "mb-3")
+                button(
+                    type = "submit"
+                    class = "btn btn-primary"
+                ) Update

@@ -3,85 +3,86 @@ include ../../mixins/alert.pug
 include ../../mixins/select-tree.pug
 
 block main 
-    h1(class = "mb-4") Create new Category 
-    +alert-error(5000)
+    if(role.permission.includes("product-category_create"))
+        h1(class = "mb-4") Create new Category 
+        +alert-error(5000)
 
-    form(
-        action=`${prefixAdmin}/products-category/create`
-        method="POST"
-        enctype = "multipart/form-data"
-    )
-        div(class="form-group")
-            label(for="title") Title 
-            input(
-                type = "text"
-                class = "form-control"
-                id = "title"
-                name="title"
-                required
-            )
-            
-        div(class="form-group")
-            label(for="parent_id") Parent Category 
-            select(
-                name = "parent_id"
-                id = "parent_id"
-                class= "form-select"
-            )
-                option(value="") --Choose Parent Category--
-                if (records)
-                    +select-tree(records)
+        form(
+            action=`${prefixAdmin}/products-category/create`
+            method="POST"
+            enctype = "multipart/form-data"
+        )
+            div(class="form-group")
+                label(for="title") Title 
+                input(
+                    type = "text"
+                    class = "form-control"
+                    id = "title"
+                    name="title"
+                    required
+                )
+                
+            div(class="form-group")
+                label(for="parent_id") Parent Category 
+                select(
+                    name = "parent_id"
+                    id = "parent_id"
+                    class= "form-select"
+                )
+                    option(value="") --Choose Parent Category--
+                    if (records)
+                        +select-tree(records)
 
-        div(class="form-group")
-            label(for="desc") Description
-            textarea(
-                class = "form-control tiny-mce"
-                id = "desc"
-                name="description"
-                rows="5"
-            )
-        div(class="form-group" upload-image)
-            label(for="thumbnail") Thumbnail (url)
-            input(
-                type = "file"
-                class = "form-control"
-                id = "thumbnail"
-                name="thumbnail"
-                accept="image/"
-                upload-image-input
-            )
-            img(src="" upload-image-preview class="img-preview")
-        div(class="form-group")
-            label(for="position") Position
-            input(
-                type = "number"
-                class = "form-control"
-                id = "position"
-                name="position"
-                placeholder = "Auto Increment"
-                min="1"
-            )
-        div(class="form-group form-check form-check-inline")
-            input(
-                type = "radio"
-                class = "form-check-input"
-                id = "statusAvailable"
-                name="status"
-                value="available"
-                checked
-            )
-            label(for="statusAvailable" class="form-check-label") Available
-        div(class="form-group form-check form-check-inline")
-            input(
-                type = "radio"
-                class = "form-check-input"
-                id = "statusUnavailable"
-                name="status"
-                value="unavailable"
-            )
-            label(for="statusAvailable" class="form-check-label") Unavailable
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Create New
+            div(class="form-group")
+                label(for="desc") Description
+                textarea(
+                    class = "form-control tiny-mce"
+                    id = "desc"
+                    name="description"
+                    rows="5"
+                )
+            div(class="form-group" upload-image)
+                label(for="thumbnail") Thumbnail (url)
+                input(
+                    type = "file"
+                    class = "form-control"
+                    id = "thumbnail"
+                    name="thumbnail"
+                    accept="image/"
+                    upload-image-input
+                )
+                img(src="" upload-image-preview class="img-preview")
+            div(class="form-group")
+                label(for="position") Position
+                input(
+                    type = "number"
+                    class = "form-control"
+                    id = "position"
+                    name="position"
+                    placeholder = "Auto Increment"
+                    min="1"
+                )
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type = "radio"
+                    class = "form-check-input"
+                    id = "statusAvailable"
+                    name="status"
+                    value="available"
+                    checked
+                )
+                label(for="statusAvailable" class="form-check-label") Available
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type = "radio"
+                    class = "form-check-input"
+                    id = "statusUnavailable"
+                    name="status"
+                    value="unavailable"
+                )
+                label(for="statusAvailable" class="form-check-label") Unavailable
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Create New

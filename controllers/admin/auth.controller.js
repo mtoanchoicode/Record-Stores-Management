@@ -6,10 +6,22 @@ const systemConfig = require("../../config/system")
 
 // [GET] /admin/auth/login
 
-module.exports.login = (req, res)=>{
-    res.render("admin/pages/auth/login", {
-        pageTitle: "Login Page"
-    });
+module.exports.login = async (req, res)=>{
+    if(req.cookies.token){
+        const user = await Account.findOne({token: req.cookies.token})
+        if(!user){
+            res.render("admin/pages/auth/login", {
+                pageTitle: "Login Page"
+            })
+        }else{
+            res.redirect(`${systemConfig.prefixAdmin}/dashboard`)
+        }
+    }else{
+        res.render("admin/pages/auth/login", {
+            pageTitle: "Login Page"
+        });
+    }
+
 }
 
 // [POST] /admin/auth/login

@@ -26,18 +26,26 @@ mixin table-tree(items, level = 1)
                     name="position"
                 )
             td 
-                if(item.status == "available")
-                    a(href="javascript:;" class ="badge bg-success" data-status = item.status data-id = item.id button-change-status) Available
-                else
-                    a(href="javascript:;" class ="badge bg-danger" data-status=item.status data-id = item.id button-change-status) Unavailable
-            td 
+                if(role.permission.includes("product-category_edit"))
+                    if(item.status == "available")
+                        a(href="javascript:;" class ="badge bg-success" data-status = item.status data-id = item.id button-change-status) Available
+                    else
+                        a(href="javascript:;" class ="badge bg-danger" data-status=item.status data-id = item.id button-change-status) Unavailable
+                else 
+                    if(item.status == "available")
+                        p(class ="badge bg-success") Available
+                    else
+                        p(class ="badge bg-danger") Unavailable
+            td
                 a(href=`${prefixAdmin}/products-category/detail/${item.id}` class="btn btn-secondary btn-sm mx-1") Detail 
-                a(href=`${prefixAdmin}/products-category/edit/${item.id}` class="btn btn-warning btn-sm mx-1") Edit 
-                button(
-                    class="btn btn-danger btn-sm mx-1"
-                    button-delete
-                    data-id = item.id
-                    ) Delete
+                if(role.permission.includes("product-category_edit"))
+                    a(href=`${prefixAdmin}/products-category/edit/${item.id}` class="btn btn-warning btn-sm mx-1") Edit 
+                if(role.permission.includes("product-category_delete"))
+                    button(
+                        class="btn btn-danger btn-sm mx-1"
+                        button-delete
+                        data-id = item.id
+                        ) Delete
 
         if item.children && item.children.length > 0
             +table-tree(item.children, level + 1)

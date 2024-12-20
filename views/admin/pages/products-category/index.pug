@@ -4,40 +4,42 @@ include ../../mixins/table-tree.pug
 include ../../mixins/pagination.pug
 
 block main
-    h1 Product Category
+    if(role.permission.includes("product-category_view"))
+        h1 Product Category
 
-    .card.mb-3
-        .card-header List
-        .card-body 
-            .row 
-                .col-8 
-                .col-4 
-                    a(
-                        href=`${prefixAdmin}/products-category/create`
-                        class = "btn btn-outline-success"
-                    ) + New Category
+        .card.mb-3
+            .card-header List
+            .card-body 
+                .row 
+                    .col-8 
+                    .col-4
+                        if(role.permission.includes("product-category_create"))
+                            a(
+                                href=`${prefixAdmin}/products-category/create`
+                                class = "btn btn-outline-success"
+                            ) + New Category
 
-            table(
-                class="table table-hover table-sm"
-                checkbox-multi 
-            )
-                thead 
-                    tr 
-                        th
-                            input(type="checkbox" name="checkall")
-                        th No.
-                        th Thumbnail 
-                        th Cetegory
-                        th Position 
-                        th Status 
-                        th Actions
-                        
-                tbody 
-                    +table-tree(records) 
+                table(
+                    class="table table-hover table-sm"
+                    checkbox-multi 
+                )
+                    thead 
+                        tr 
+                            th
+                                input(type="checkbox" name="checkall")
+                            th No.
+                            th Thumbnail 
+                            th Cetegory
+                            th Position 
+                            th Status 
+                            th Actions
+                            
+                    tbody 
+                        +table-tree(records) 
 
-    form(action=""
-        method="POST"
-        id = "form-change-status"
-        data-path= `${prefixAdmin}/products-category/change-status`)
+        form(action=""
+            method="POST"
+            id = "form-change-status"
+            data-path= `${prefixAdmin}/products-category/change-status`)
 
     script(src="/admin/js/product.js")
