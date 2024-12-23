@@ -1,5 +1,6 @@
 const Product = require("../../models/product.models")
 const ProductCategory = require("../../models/product-category.model")
+const Account = require("../../models/account.model")
 
 const systemConfig = require("../../config/system")
 
@@ -55,6 +56,15 @@ module.exports.index = async (req, res)=>{
         .limit(objectPagination.limitItems)
         .skip(objectPagination.skip);
 
+    for (const product of products){
+        const user = await Account.findOne({
+            _id: product.createdBy.account_id
+        })
+        if (user){
+            product.accountFullName = user.fullName
+        }
+    }
+
     res.render("admin/pages/products/index", {
         pageTitle: "Product List",
         products: products,
@@ -92,7 +102,7 @@ module.exports.changeMulti = async (req, res) => {
             req.flash("success", `Status Updated for ${ids.length} products(s)`)
             break;
         case "delete-all":
-            await Product.updateMany({_id:{$in:ids}}, {deleted: true, deletedAt: new Date()})
+            await Product.updateMany({_id:{$in:ids}}, {deleted: true, deletedBy: {account_id: res.locals.user.id, deletedAt: new Date()}})
             req.flash("success", `${ids.length} products(s) deleted`)
             break;
         case "change-position":
@@ -116,7 +126,7 @@ module.exports.deleteItem = async (req, res) => {
     const id = req.params.id
 
     //await Product.deleteOne({_id: id})
-    await Product.updateOne({_id: id}, {deleted:true, deletedAt: new Date()})
+    await Product.updateOne({_id: id}, {deleted:true, deletedBy: {account_id: res.locals.user.id, deletedAt: new Date()}})
     req.flash("success", `1 product deleted`)
     res.redirect("back");
 }
@@ -151,6 +161,11 @@ module.exports.createPost = async (req, res)=>{
     }else{
         req.body.position = parseInt(req.body.position)
     }
+    
+    req.body.createdBy = {
+        account_id: res.locals.user.id
+    }
+
     const product = new Product(req.body)
     await product.save()
 

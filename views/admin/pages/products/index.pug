@@ -6,6 +6,8 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi
 include ../../mixins/alert
 include ../../mixins/sort
+include ../../mixins/moment
+
 
 block main
     if(role.permission.includes("product_view"))
@@ -55,6 +57,7 @@ block main
                             th Price 
                             th Position 
                             th Status 
+                            th Created By 
                             th Actions
                             
                     tbody 
@@ -96,6 +99,10 @@ block main
                                             p(class ="badge bg-success") Available
                                         else
                                             p( class ="badge bg-danger") Unavailable
+                                td 
+                                    p #{item.accountFullName}
+                                    p
+                                        +formatDateTime(item.createdBy.createdAt)
                                 td 
                                     a(href=`${prefixAdmin}/products/detail/${item.id}` class="btn btn-secondary btn-sm mx-1") Detail 
                                     if(role.permission.includes("product_edit"))
