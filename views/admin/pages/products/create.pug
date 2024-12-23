@@ -35,6 +35,26 @@ block main
                     if (category)
                         +select-tree(category)
 
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type = "radio"
+                    class = "form-check-input"
+                    id = "highlight"
+                    name="featured"
+                    value="1"
+                )
+                label(for="highlight" class="form-check-label") Highlight
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type = "radio"
+                    class = "form-check-input"
+                    id = "normal"
+                    name="featured"
+                    value="0"
+                    checked
+                )
+                label(for="normal" class="form-check-label") Normal
+
             div(class="form-group")
                 label(for="desc") Description
                 textarea(

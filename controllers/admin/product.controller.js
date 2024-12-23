@@ -57,12 +57,22 @@ module.exports.index = async (req, res)=>{
         .skip(objectPagination.skip);
 
     for (const product of products){
+        // Creator
         const user = await Account.findOne({
             _id: product.createdBy.account_id
         })
         if (user){
             product.accountFullName = user.fullName
         }
+        // Updater
+        const updatedBy = product.updatedBy[product.updatedBy.length -1];
+        if (updatedBy){
+            const userUpdated = await Account.findOne({
+                _id: updatedBy.account_id
+            })
+            updatedBy.accountFullName = userUpdated.fullName
+        }
+
     }
 
     res.render("admin/pages/products/index", {
@@ -80,7 +90,12 @@ module.exports.changeStatus = async (req, res) => {
     const status = req.params.status
     const id = req.params.id
 
-    await Product.updateOne({_id: id}, {status: status})
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
+
+    await Product.updateOne({_id: id}, {status: status, $push: {updatedBy: updatedBy}})
 
     req.flash("success", "Status Updated")
 
@@ -92,13 +107,18 @@ module.exports.changeMulti = async (req, res) => {
     const type = req.body.type
     const ids = req.body.ids.split(", ")
 
+    const updatedBy = {
+        account_id: res.locals.user.id,
+        updatedAt: new Date()
+    }
+
     switch(type){
         case "available":
-            await Product.updateMany({_id:{$in:ids}}, {status: "available"})
+            await Product.updateMany({_id:{$in:ids}}, {status: "available", $push: {updatedBy: updatedBy}})
             req.flash("success", `Status Updated for ${ids.length} products(s)`)
             break;
         case "unavailable":
-            await Product.updateMany({_id:{$in:ids}}, {status: "unavailable"})
+            await Product.updateMany({_id:{$in:ids}}, {status: "unavailable", $push: {updatedBy: updatedBy}})
             req.flash("success", `Status Updated for ${ids.length} products(s)`)
             break;
         case "delete-all":
@@ -109,7 +129,7 @@ module.exports.changeMulti = async (req, res) => {
             for(const item of ids){
                 let[id, position] = item.split("-")
                 position = parseInt(position)
-                await Product.updateOne({_id:id}, {position: position})
+                await Product.updateOne({_id:id}, {position: position, $push: {updatedBy: updatedBy}})
             }
             
             req.flash("success", `Successfully changed position for ${ids.length} products(s)`)
@@ -124,7 +144,7 @@ module.exports.changeMulti = async (req, res) => {
 // [DELETE] /admin/products/delete/:id
 module.exports.deleteItem = async (req, res) => {
     const id = req.params.id
-
+    
     //await Product.deleteOne({_id: id})
     await Product.updateOne({_id: id}, {deleted:true, deletedBy: {account_id: res.locals.user.id, deletedAt: new Date()}})
     req.flash("success", `1 product deleted`)
@@ -209,9 +229,15 @@ module.exports.editPatch = async (req, res)=>{
     req.body.position = parseInt(req.body.position)
 
     try{
-        await Product.updateOne({
-            _id: id
-        }, req.body)
+        const updatedBy = {
+            account_id: res.locals.user.id,
+            updatedAt: new Date()
+        }
+
+        await Product.updateOne({ _id: id }, { 
+            ...req.body, 
+            $push: {updatedBy: updatedBy}
+        })
         req.flash("success", `Successfully Updated`)
     } catch(error){
         req.flash("error", `Updated Fail`)

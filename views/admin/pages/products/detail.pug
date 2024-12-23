@@ -29,6 +29,9 @@ block main
                 else 
                     span(class="badge bg-danger") Unavailable   
 
+        if(product.featured)
+            div(class="mb-4") Highlight: <b>#{product.featured === "1" ? "True" : "False"}</b>
+
         if(product.position)
             div(class="mb-4") Position: <b>#{product.position}</b>
         
