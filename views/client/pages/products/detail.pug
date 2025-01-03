@@ -1,24 +1,64 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 
 block main
-    .container.my-3 
-        .row 
-            .col-12 
-                if(product.title)
-                    h1(class="mb-4") #{product.title}
+    +alert-success(2000)
 
-                if(product.description)
-                    div(class="mb-4") !{product.description}
 
-                if(product.price)
-                    div(class="mb-4") Price: <b>#{product.price}$</b>
-                
-                if(product.discountPercentage)
-                    div(class="mb-4") Discount: <b>#{product.discountPercentage}%</b>
+    .product-detail
+        .container.my-5 
+            button(
+                class= "btn btn-secondary my-3"
+                button-go-back
+            ) Back
+            .row 
+                .col-6
+                    .inner-thumb
+                        if(product.thumbnail)
+                            img(src=product.thumbnail, alt = product.title)
+                .col-6
+                    h1(class = "inner-title") #{product.title}
 
-                if(product.stock)
-                    div(class="mb-4") Stock: <b>#{product.stock}</b>
+                    if(product.category)
+                        div(class="inner-category")
+                            span Category: 
+                            a(href=`/products/${product.category.slug}`) #{product.category.title}
 
-                if(product.thumbnail)
-                    div(class="mb-4")
-                        img(src=product.thumbnail style="width:100px")
+                    if(product.priceNew)
+                        div(class="inner-price-new") #{product.priceNew}$
+
+                    if(product.price)
+                        div(class="inner-price-old") #{product.price}$
+
+                    if(product.discountPercentage)
+                        div(class="inner-percent") Discount: <span>#{product.discountPercentage}%</span>
+
+                    if(product.stock)
+                        div(class="inner-stock") Stock: <span>#{product.stock}</span>
+
+                    form(
+                        action = `/cart/add/${product.id}`
+                        method = "POST"
+                    )   
+                        input(
+                            class = "form-control mb-2"
+                            type = "number"
+                            name = "quantity"
+                            value = "1"
+                            min = "1"
+                            max = product.stock
+                            style="width: 5rem;"
+                        )
+                        button(
+                            type = "submit"
+                            class = "btn btn-success btn-block"
+                        ) Add to Cart
+        hr
+
+        .container.my-5 
+            .row 
+                .col-12 
+                    +box-head("Description")                
+                    if(product.description)
+                        .inner-desc !{product.description}              

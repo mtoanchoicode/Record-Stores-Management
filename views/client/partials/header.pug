@@ -7,7 +7,26 @@ header.header
                 .inner-logo 
                     a(href="/")
                         img(src="/images/logo.png", alt="Logo", class="w-25")
-            .col-9 
+
+            .col-5
+                form(
+                    action = "/search"
+                    method = "GET"
+                )
+                    div(class = "mb-0 d-flex align-items-center gap-2")
+                        input(
+                            type = "text"
+                            placeholder = "Keyword ..."
+                            class = "form-control"
+                            name = "keyword"
+                            value = keyword
+                        )
+                        button(
+                            type = "submit"
+                            class = "btn btn-primary"
+                        ) Search
+
+            .col-4 
                 .inner-menu 
                     ul 
                         li 
@@ -16,3 +35,14 @@ header.header
                             -const pathProduct = "/products"
                             a(href=pathProduct) Product
                                 +sub-menu(layoutProductsCategory, pathProduct)
+                        li  
+                            a(href = "/cart") Cart (#{miniCart ? miniCart.totalQuantity : "0"})
+
+                        if(user)
+                            li 
+                                a(href="/user/logout") Log out
+                        else                       
+                            li 
+                                a(href="/user/login") Log in
+                            li 
+                                a(href="/user/register") Register

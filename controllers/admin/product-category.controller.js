@@ -38,6 +38,21 @@ module.exports.create = async (req, res)=>{
 
 // [POST] /admin/products-category/create
 module.exports.createPost = async (req, res)=>{
+    // if(permissions.includes("product-category_create")){
+    //     if(req.body.position == ""){
+    //         const countProducts = await ProductCategory.countDocuments();
+    //         req.body.position = countProducts + 1
+    //     }else{
+    //         req.body.position = parseInt(req.body.position)
+    //     }
+
+    //     const record = new ProductCategory(req.body)
+    //     await record.save()
+
+    //     res.redirect(`${systemConfig.prefixAdmin}/products-category`)
+    // }else{
+    //     return;
+    // }
     if(req.body.position == ""){
         const countProducts = await ProductCategory.countDocuments();
         req.body.position = countProducts + 1

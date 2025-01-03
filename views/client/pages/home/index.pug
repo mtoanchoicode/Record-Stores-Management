@@ -1,19 +1,19 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/product-layout.pug
+    
     
 block main
-    .container.my-3 
-        .row 
-            .col-12
-                +box-head("Product list")
+    .section-products-featured.my-5 
+        .container 
+            .row 
+                .col-12
+                    +box-head("Hihglight Products")
+            +product-grid(productsFeatured)
 
-        .row 
-            .col-4.mb-3 
-                .product-item 
-                    .inner-image 
-                        img(src="https://www.swiftpublisher.com/assets/img/articles/design-album-cover/album-cover.jpg", alt="")
-                    .inner-content 
-                        h3.inner-title NeonSoul 
-                        .inner-price-new 80$
-                        .inner-price-old 100$
-                        .inner-discount -20%
+    .section-products-featured.my-5 
+        .container 
+            .row 
+                .col-12
+                    +box-head("New Products")
+            +product-grid(productsNew)

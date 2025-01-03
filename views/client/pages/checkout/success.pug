@@ -1,0 +1,56 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main 
+    .container.my-3 
+        .row 
+            .col-12 
+                +box-head("Order Success")
+        
+        .row 
+            .col-12 
+                div(class = "alert alert-success")
+                    | Congratulations on your successful order! Your order will be delivered to you within 2 to 4 business days.
+        
+        if(order)
+            .row 
+                .col-12 
+                    h4(class= "mb-2") Personal Information 
+                    table(class="table table-bordered")
+                        tbody 
+                            tr 
+                                td Fullname 
+                                td 
+                                    b #{order.userInfo.fullName}
+                            tr 
+                                td Phone Number 
+                                td 
+                                    b #{order.userInfo.phone}
+                            tr 
+                                td Address 
+                                td 
+                                    b #{order.userInfo.address}
+            .row 
+                .col-12 
+                    if (order.products.length > 0)
+                        h4(class= "mb-2") Orders
+                        table(class="table table-bordered")
+                            thead 
+                                tr 
+                                    th STT 
+                                    th Thumbnail 
+                                    th Name 
+                                    th Price 
+                                    th Quantity 
+                                    th Total 
+                            tbody 
+                                each item, index in order.products
+                                    tr 
+                                        td #{index + 1}
+                                        td  
+                                            img(src = item.productInfo.thumbnail class="img-fluid" alt = "Product 1" width = "80px")
+                                        td #{item.productInfo.title}
+                                        td #{item.productInfo.priceNew}$
+                                        td #{item.quantity}
+                                        td #{item.totalPrice}$
+                        h3.text-end Total order: #{order.totalPrice}$  
