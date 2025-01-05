@@ -4,6 +4,8 @@ const User = require ("../../models/user.model")
 const ForgotPassword = require ("../../models/forgot-password.model")
 
 const generateHelper = require("../../helper/generate")
+const sendMailHelper = require("../../helper/sendMail")
+const Cart = require("../../models/cart.model")
 
 // [GET] /user/register
 module.exports.register = async(req, res)=>{
@@ -35,14 +37,14 @@ module.exports.registerPost = async(req, res)=>{
     res.redirect("/")
 }
 
-// [GET] /user/register
+// [GET] /user/login
 module.exports.login = async(req, res)=>{
     res.render("client/pages/user/login" , {
         pageTitle: "Log in"
     })
 }
 
-// [POST] /user/register
+// [POST] /user/login
 module.exports.loginPost = async(req, res)=>{
     const email = req.body.email
     const password =req.body.password
@@ -68,7 +70,15 @@ module.exports.loginPost = async(req, res)=>{
         return;
     }
 
+
+
     res.cookie("tokenUser", user.tokenUser)
+
+    await Cart.updateOne({
+        _id: req.cookies.cartId
+    }, {
+        user_id: user.id
+    })
 
     res.redirect("/")
 }
@@ -108,10 +118,15 @@ module.exports.forgotPasswordPost = async(req, res)=>{
         otp: otp,
         expiredAt: Date.now()
     }
-
+    console.log(objectForgotPassword);
     const forgotPassword = new ForgotPassword(objectForgotPassword)
     await forgotPassword.save()
 
+    const subject = "[Flow District] - OTP verification code to retrieve password"
+    const html = `
+    <p>OTP code is <b>${otp}</b>.</p><p>Note: Do not reveal the OTP code.</p><p>It will expire after 3 minutes.</p>
+    `
+    sendMailHelper.sendMail(email, subject, html)
     
 
     res.redirect(`/user/password/otp?email=${email}`)
@@ -150,4 +165,33 @@ module.exports.otpPasswordPost = async(req, res)=>{
     res.cookie("tokenUser", user.tokenUser)
 
     res.redirect("/user/password/reset")
+}
+
+// [GET] /user/password/reset
+module.exports.resetPassword = async(req, res)=>{
+
+    res.render("client/pages/user/reset-password" , {
+        pageTitle: "Reset Pasword",
+    })
+}
+
+// [POST] /user/password/reset
+module.exports.resetPasswordPost = async(req, res)=>{
+    const password = req.body.password
+    const tokenUser = req.cookies.tokenUser
+
+    await User.updateOne({
+        tokenUser: tokenUser
+    },{
+        password: md5(password)
+    })
+
+    res.redirect("/")
+}
+
+//[GET] /user/info
+module.exports.info = async(req, res) =>{
+    res.render("client/pages/user/info" , {
+        pageTitle: "User Info",
+    })
 }

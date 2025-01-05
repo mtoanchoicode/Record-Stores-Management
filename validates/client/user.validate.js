@@ -48,3 +48,22 @@ module.exports.otpPasswordPost = (req, res, next)=>{
     }
     next();
 }
+
+module.exports.resetPasswordPost = (req, res, next)=>{
+    if(!req.body.password){
+        req.flash("error", `Please fill in the password`) 
+        res.redirect("back")
+        return;
+    }
+    if(!req.body.confirmPassword){
+        req.flash("error", `Please fill in the confirm Password`) 
+        res.redirect("back")
+        return;
+    }
+    if(req.body.confirmPassword != req.body.password){
+        req.flash("error", `Password confirm is not same with password`) 
+        res.redirect("back")
+        return;
+    }
+    next();
+}
